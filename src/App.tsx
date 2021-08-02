@@ -1,8 +1,9 @@
 import React, { ChangeEvent, useEffect, useState, VFC } from 'react';
 import { db } from './firebase';
+import TaskItem from './TaskItem';
 import './App.css';
 
-import { FormControl, TextField } from '@material-ui/core';
+import { FormControl, List, TextField } from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add';
 
 const App: VFC = () => {
@@ -44,9 +45,11 @@ const App: VFC = () => {
         <AddIcon />
       </button>
 
-      {tasks.map((task) => (
-        <h3 key={task.id}>{task.title}</h3>
-      ))}
+      <List>
+        {tasks.map((task) => (
+          <TaskItem key={task.id} id={task.id} title={task.title} />
+        ))}
+      </List>
     </div>
   );
 };
