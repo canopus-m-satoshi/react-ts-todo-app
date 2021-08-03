@@ -9,31 +9,32 @@ const Login: React.VFC = (props: any) => {
   const [password, setPassword] = useState('');
 
   useEffect(() => {
-    auth.onAuthStateChanged((user) => {
+    const unSub = auth.onAuthStateChanged((user) => {
       user && props.history.push('/');
     });
+    return () => unSub();
   }, [props.history]);
 
-  const onClickLogin = () => {
-    // eslint-disable-next-line @typescript-eslint/no-unused-expressions
-    isLogin
-      ? async () => {
-          try {
-            await auth.signInWithEmailAndPassword(email, password);
-            props.history.push('/');
-          } catch (error) {
-            alert(error.message);
-          }
-        }
-      : async () => {
-          try {
-            await auth.createUserWithEmailAndPassword(email, password);
-            props.history.push('/');
-          } catch (error) {
-            alert(error.message);
-          }
-        };
-  };
+  // const onClickLogin = () => {
+  //   // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+  //   isLogin
+  //     ? async () => {
+  //         try {
+  //           await auth.signInWithEmailAndPassword(email, password);
+  //           props.history.push('/');
+  //         } catch (error) {
+  //           alert(error.message);
+  //         }
+  //       }
+  //     : async () => {
+  //         try {
+  //           await auth.createUserWithEmailAndPassword(email, password);
+  //           props.history.push('/');
+  //         } catch (error) {
+  //           alert(error.message);
+  //         }
+  //       };
+  // };
 
   return (
     <div className={styles.login__root}>
@@ -72,7 +73,25 @@ const Login: React.VFC = (props: any) => {
         variant="contained"
         color="primary"
         size="small"
-        onClick={onClickLogin}>
+        onClick={
+          isLogin
+            ? async () => {
+                try {
+                  await auth.signInWithEmailAndPassword(email, password);
+                  props.history.push('/');
+                } catch (error) {
+                  alert(error.message);
+                }
+              }
+            : async () => {
+                try {
+                  await auth.createUserWithEmailAndPassword(email, password);
+                  props.history.push('/');
+                } catch (error) {
+                  alert(error.message);
+                }
+              }
+        }>
         {isLogin ? 'login' : 'register'}
       </Button>
       <br />
